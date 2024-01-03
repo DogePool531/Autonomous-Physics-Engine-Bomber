@@ -12,7 +12,7 @@ if STARTED ~= nil then
 else
     --global and functions
     
-    FPL = {
+    FPL = { -- Flight Path List (FPL) representing waypoints and constants
         {"const", "const","const", "const", "const", "na", "na", "na", "na","na"},
     {2000, -2000, -2000, -4500, 0, 0, 0, 0, 0, 0},
     {2000, 2000, -2000, -3500, 0, 0, 0, 0, 0, 0},
@@ -20,7 +20,7 @@ else
     }
     stat = 0
     waypoint = 1
-    function getAtOri() --Rotates about the At Axis
+    function getAtOri() --Rotates about the Foward Axis
         local lY = self.shape:getUp()
         local lZ = self.shape:getAt()
         
@@ -66,7 +66,7 @@ else
         return((natV))
         
     end
-    function getAtV() -- foward veloicty
+    function getAtV() -- foward velocity
 
         local direc = self.shape:getAt()
         local speed = self.shape:getVelocity()
@@ -155,14 +155,14 @@ else
         return(x)
     end
 
-    function getAngle()
+    function getAngle() -- Returns angle between the airplanes direction and the Waypoint in the flight plan
         local vToT = sm.vec3.new( FPL[2][waypoint], FPL[3][waypoint], FPL[4][waypoint]) - self.shape:getWorldPosition()
         local face = self.shape:getVelocity() + self.shape:getAt()
         local tSign = sign(vToT.x * face.y - face.x * vToT.y)
         local costheta = tSign * math.acos((vToT.y * face.y + vToT.x * face.x)/(math.sqrt(vToT.x*vToT.x +vToT.y*vToT.y)*math.sqrt(face.y*face.y+face.x*face.x)))
         return(costheta)
     end
-    function getDistance()
+    function getDistance() -- Distance to the Waypoint in the FPL
         local vToT = sm.vec3.new( FPL[2][waypoint], FPL[3][waypoint], FPL[4][waypoint]) - self.shape:getWorldPosition()
         return(sm.vec3.length(vToT))
     end
@@ -174,10 +174,10 @@ else
     -- Note array declares values for different PID loops 
     -- in order,       roll, alpha, yaw, throttle, orient, climb, steering
     local km = 2500 --       1      2      3    4     5        6     7
-    local Kpr =         {    1,   1.4,   0.7,  10,  2,    0.01,    4} -- Proportional gain
+    local Kpr =         {    1,   1.4,   0.7,  10,  2,     0.01,      4} -- Proportional gain
     local Kir =         {    0,  0.00,  0.00,   1, 0.00, 0.00006,    0} -- Integral gain
-    local Kdr =         {  0.3,   0.3,   0.1,  10,  1,     0.5,    1} -- Derivative gain
-    local maxPos =      { 0.35,  0.35,  0.35, 400,  0.2,    0.5, 0.7}
+    local Kdr =         {  0.3,   0.3,   0.1,  10,  1,     0.5,      1} -- Derivative gain
+    local maxPos =      { 0.35,  0.35,  0.35, 400,  0.2,    0.5,   0.7}
     local maxNeg =      {-0.35, -0.35, -0.35,   0, -0.25,   -0.60,-0.7} 
     local maxPosInt =   { 0.35,   0.1,  0.35, 400,  0.2,   -0.07,    0}
     local maxNegInt =   {-0.35,  -0.3, -0.35,   0, -0.3,  -0.085,    0} 

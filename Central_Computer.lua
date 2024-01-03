@@ -13,10 +13,10 @@ else
     --global and functions
     
     FPL = {
-    {"const", "const","const", "const", "const", "na", "na", "na", "na","na"},
-    {2000, -2000, -2000, -4500, 0, 0, 0, 0, 0, 0},
-    {2000, 2000, -2000, -3500, 0, 0, 0, 0, 0, 0},
-    {300, 200, 200, 200, 200, 0, 0, 0, 0, 0},
+        {"const", "target","na", "na", "na", "na", "na", "na", "na","na"},
+        {1000, 197.125, -2000, -4500, 0, 0, 0, 0, 0, 0},
+        {1000, -230.875, -2000, -3500, 0, 0, 0, 0, 0, 0},
+        {200, -12.625, 200, 200, 200, 0, 0, 0, 0, 0},
     }
     stat = 0
     waypoint = 1
@@ -167,15 +167,15 @@ else
     -- Note array declares values for different PID loops 
     -- in order,       roll, alpha, yaw, throttle, orient, climb, steering
     local km = 2500 --       1      2      3    4     5        6     7
-    local Kpr =         {    1,   1.4,   0.7,  10,  2,    0.01,    4} -- Proportional gain
+    local Kpr =         {    1,   1.4,   0.7,  10,    2,    0.01,    4} -- Proportional gain
     local Kir =         {    0,  0.00,  0.00,   1, 0.00, 0.00006,    0} -- Integral gain
-    local Kdr =         {  0.3,   0.3,   0.1,  10,  1,     0.5,    1} -- Derivative gain
-    local maxPos =      { 0.35,  0.35,  0.35, 400,  0.2,    0.5, 0.7}
-    local maxNeg =      {-0.35, -0.40, -0.35,   0, -0.25,   -0.60,-0.7} 
-    local maxPosInt =   { 0.35,   0.1,  0.35, 400,  0.2,   -0.07,    0}
-    local maxNegInt =   {-0.35,  -0.3, -0.35,   0, -0.3,  -0.085,    0} 
-    local maxPosError = {     1,    3,     1,  30,    1,      60,  0.8} 
-    local maxNegError = {    -1,   -1,    -1, -30,   -1,     -60, -0.8}
+    local Kdr =         {  0.3,   0.3,   0.1,  10,    1,     0.5,    1} -- Derivative gain
+    local maxPos =      { 0.35,  0.35,  0.35, 400,  0.2,     0.5,  0.7}
+    local maxNeg =      {-0.35, -0.40, -0.35,   0, -0.25,   -0.60, -0.7} 
+    local maxPosInt =   { 0.35,   0.1,  0.35, 400,   0.2,   -0.07,    0}
+    local maxNegInt =   {-0.35,  -0.3, -0.35,   0,  -0.3,  -0.085,    0} 
+    local maxPosError = {     1,    3,     1,  30,     1,      60,  0.8} 
+    local maxNegError = {    -1,   -1,    -1, -30,    -1,     -60, -0.8}
     local intBound =    {0}
     local integral =    {0, 0, 0, 100, 0, 0, 0}   -- Integral term
     local prevError =   {0, 0, 0, 0, 0, 0, 0}  -- Previous error for derivative term
@@ -232,7 +232,7 @@ else
         --> Check if stat
         if stat ~= "1" then 
             getPacket()
-            print("noPacket")
+            --print("noPacket")
         end
 
         setreg("toBomb", waypoint)

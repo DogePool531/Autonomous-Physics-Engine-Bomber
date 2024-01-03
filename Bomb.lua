@@ -1,3 +1,5 @@
+-- mqsci3 is the current model working on science
+
 if STARTED ~= nil then
     if input() then
         local ran, err = pcall(onTick)
@@ -14,9 +16,9 @@ else
     
     FPL = {
         {"const", "target","na", "na", "na", "na", "na", "na", "na","na"},
-        {1000, 173.875, -2000, -4500, 0, 0, 0, 0, 0, 0},
-        {1000, -232.625, -2000, -3500, 0, 0, 0, 0, 0, 0},
-        {200, -12.125, 200, 200, 200, 0, 0, 0, 0, 0},
+        {1000, 197.125, -2000, -4500, 0, 0, 0, 0, 0, 0},
+        {1000, -230.875, -2000, -3500, 0, 0, 0, 0, 0, 0},
+        {200, -12.625, 200, 200, 200, 0, 0, 0, 0, 0},
     }
     stat = 0
     waypoint = 1
@@ -210,6 +212,10 @@ else
        end
        
     end
+    function getDistance()
+        local vToT = sm.vec3.new( FPL[2][wayp], FPL[3][wayp], FPL[4][wayp]) - self.shape:getWorldPosition()
+        return(sm.vec3.length(vToT))
+    end
     function calcBomb()
         local t = {}
         local x = {}
@@ -225,14 +231,8 @@ else
         local Vx = sm.vec3.new(1,0,0):dot(v)
         local Vy = sm.vec3.new(0,1,0):dot(v)
         local Vz = sm.vec3.new(0,0,1):dot(v)
-        local drag = 1 - 0.025
+        local drag = 1 - 0.005
         local desZ = FPL[4][wayp]
-
-
-        
-        
-
-
         
          t[1] = 0
          x[1] = getX()
@@ -274,7 +274,7 @@ else
         
     end
     cont = 1
-    wayp = 0
+    wayp = 1
     function onTick()
 
         
@@ -300,17 +300,18 @@ else
         cont = 1
         --print(wayp, "this")
             local targetPos = sm.vec3.new(FPL[2][wayp],FPL[3][wayp],FPL[4][wayp])
-            --local estPos, dist, time = calcBomb()
-            local estPos = sm.vec3.new(getX(),gety(),getZ())
+            local estPos, dist, time = calcBomb()
+            --local estPos = sm.vec3.new(getX(),getY(),getZ())
             --print(targetPos:length() - estPos:length(), "dist")
-            --print(dist, "this")
+            print(dist, "this")
             --print(sm.physics.getGravity(), "grav")
         if FPL[1][wayp] == "target" then
             if (targetPos - estPos):length() < 800 then
             cont = 0
             end
-
-            if (targetPos - estPos):length() < 322 then
+            print(getDistance(), "getDist")
+            print((getDistance() - dist), "difference")
+            if math.abs(getDistance() - dist) < 10 then
                 out(1)
                 print("Dropped")
             end
